@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Healty Catch</string>
+    <string name="welcome">Bienvenido</string>
+    <string name="difficulty">Elige tu dificultad</string>
+    <string name="easy">Facil</string>
+    <string name="normal">Normal</string>
+    <string name="hard">Dificil</string>
+</resources>
