@@ -5,53 +5,50 @@ import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
-import com.marticurto.healtycatch.clases.Juego
+import com.marticurto.healtycatch.clases.Game
 
 
 class EasyGame : AppCompatActivity() {
 
-    var juego: Juego? = null
+    var game: Game? = null
     private val appleHandler = Handler()
-    private val bananaHandler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_easy_game)
 
-        juego = findViewById<View>(R.id.Pantalla) as Juego
-        val obs = juego!!.viewTreeObserver
-        obs.addOnGlobalLayoutListener { // Sólo se puede averiguar el ancho y alto una vez ya se ha pintado el layout. Por eso se calcula en este listener
-            juego!!.ancho = juego!!.width
-            juego!!.alto = juego!!.height
-            juego!!.appleX = juego!!.ancho / 2
-            juego!!.bananaX = juego!!.ancho / 2
-            juego!!.appleY = 250
-            juego!!.bananaY = 250
-            juego!!.radio = 50
-            juego!!.posAppleY = juego!!.alto-50
+        //creamos las variables necesasias y definimos que no haya enemigos
+        game = findViewById<View>(R.id.Pantalla) as Game
+        val obs = game!!.viewTreeObserver
+        game!!.enemyActive=false
+
+        //creamos un listener para saber las medidas de la pantalla una vez pintada y asi poder colocar la cesta
+        obs.addOnGlobalLayoutListener {
+            game!!.ancho = game!!.width
+            game!!.alto = game!!.height
+            game!!.cestaX = game!!.ancho / 2
+            game!!.cestaY = 250
+            game!!.radio = 50
         }
 
         //Ejecutamos cada 20 milisegundos
         val appleTimer = Timer()
         appleTimer.schedule(object : TimerTask() {
             override fun run() {
-                appleHandler.post { //Cada 20 segundos movemos la moneda 10dp
-                    juego!!.posAppleY -= 10
+                appleHandler.post { //Cada 20 segundos movemos las frutas
+                    game!!.posAppleY -= 10
+                    game!!.posBananaY -= 12
                     //refreca la pantalla y llama al draw
-                    juego!!.invalidate()
+                    game!!.invalidate()
                 }
             }
         }, 0, 20)
+    }
 
-        val bananaTimer = Timer()
-        bananaTimer.schedule(object : TimerTask() {
-            override fun run() {
-                bananaHandler.post { //Cada 20 segundos movemos la moneda 10dp
-                    juego!!.posBananaY -= 10
-                    //refreca la pantalla y llama al draw
-                    juego!!.invalidate()
-                }
-            }
-        },1000, 20)
+    //cuando se destruye la actividad paramos la musica y liberamos recursos
+    override fun onDestroy() {
+        super.onDestroy()
+        game?.gameLoop?.stop()
+        game?.gameLoop?.release()
     }
 }
