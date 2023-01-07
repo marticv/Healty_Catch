@@ -16,7 +16,7 @@ import kotlin.random.Random.*
  *
  * imagenes de https://www.cleanpng.com/
  * musica de https://file-examples.com
- * efectos de Sound Effect from https://pixabay.com
+ * efectos de sonido de https://pixabay.com
  *
  */
 // Extendemos de view para dibujar
@@ -30,19 +30,14 @@ open class Game//en el constructor hacemos que empieze a sonar la musica en loop
     var cestaY = 0
     var radio = 0
     private var posAppleX = 0
-    var posAppleY = 0
+    var posAppleY = alto-50
     private var posBananaX = 0
-    var posBananaY = 0
+    var posBananaY = alto-50
     private var posBurgerX = 0
-    var posBurgerY = 0
+    var posBurgerY = alto - 50
 
     //variable para ver si ponemos enemigos
     var enemyActive = false
-
-    //variables para el sonido y musica
-    var gameLoop: MediaPlayer = MediaPlayer.create(context,R.raw.music)
-    private var error: MediaPlayer = MediaPlayer.create(context,R.raw.error)
-    private var beep: MediaPlayer = MediaPlayer.create(context,R.raw.beep)
 
     private var rectCesta: RectF? = null
     private var rectApple: RectF? = null
@@ -50,6 +45,11 @@ open class Game//en el constructor hacemos que empieze a sonar la musica en loop
     private var rectBurger: RectF?=null
     private val random = Random()
     var puntuacion:Int = 0
+
+    //variables para el sonido y musica
+    var gameLoop: MediaPlayer = MediaPlayer.create(context,R.raw.music)
+    private var error: MediaPlayer = MediaPlayer.create(context,R.raw.error)
+    private var beep: MediaPlayer = MediaPlayer.create(context,R.raw.beep)
 
     //en el constructor definimos el comportamiento de la musica
     init {
@@ -147,6 +147,7 @@ open class Game//en el constructor hacemos que empieze a sonar la musica en loop
         canvas.drawBitmap(imgBanana,null,rectBanana!!,banana)
 
         //modificamos la puntuacion si se recoge una fruta
+        //y reproducimos sonido
         if (RectF.intersects(rectCesta!!, rectApple!!)) {
             puntuacion += 2
             posAppleY=alto-50
@@ -184,7 +185,6 @@ open class Game//en el constructor hacemos que empieze a sonar la musica en loop
         }
 
         if(puntuacion>=30){
-            texto.color=Color.BLACK
             posAppleY=0
             posBananaY=0
             posBurgerY=0
@@ -233,5 +233,4 @@ open class Game//en el constructor hacemos que empieze a sonar la musica en loop
             }
         }
     }
-
 }

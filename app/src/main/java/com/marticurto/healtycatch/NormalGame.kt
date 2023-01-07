@@ -42,17 +42,18 @@ class NormalGame : AppCompatActivity() {
         appleTimer.schedule(object : TimerTask() {
             override fun run() {
                 handler.post { //Cada 0.02 segundos movemos las diferentes piezas y repintamos
-                    game!!.posAppleY -= 10
-                    game!!.posBananaY -= 15
-                    game!!.posBurgerY -= 5
-                    //refreca la pantalla y llama al draw
-                    game!!.invalidate()
-
                     //si ganamos o perdemos al cabo de 3s volvemos a la pantalla inicial
                     if(game!!.puntuacion>=30|| game!!.puntuacion<0){
                         Handler().postDelayed({
                             this@NormalGame.finish()
                         }, 3000)
+                    }else{
+                        //mientras no ganemos, movemos la piezas
+                        game!!.posAppleY -= 10
+                        game!!.posBananaY -= 15
+                        game!!.posBurgerY -= 5
+                        //refreca la pantalla y llama al draw
+                        game!!.invalidate()
                     }
                 }
             }

@@ -11,7 +11,7 @@ import com.marticurto.healtycatch.clases.Game
 class EasyGame : AppCompatActivity() {
 
     var game: Game? = null
-    private val appleHandler = Handler()
+    private val handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,27 +34,29 @@ class EasyGame : AppCompatActivity() {
         }
 
         //Ejecutamos cada 20 milisegundos
-        val appleTimer = Timer()
-        appleTimer.schedule(object : TimerTask() {
+        val timer = Timer()
+        timer.schedule(object : TimerTask() {
             override fun run() {
-                appleHandler.post { //Cada 20 segundos movemos las frutas
-                    game!!.posAppleY -= 10
-                    game!!.posBananaY -= 15
-                    //refreca la pantalla y llama al draw
-                    game!!.invalidate()
+                handler.post { //Cada 20 segundos movemos las frutas
                     //si gamanos al cabo de 3s se vuelve a la pantalla inicial
                     //si ganamos o perdemos al cabo de 3s volvemos a la pantalla inicial
-                    if(game!!.puntuacion>=30|| game!!.puntuacion<0){
+                    if(game!!.puntuacion>=30 || game!!.puntuacion<=-1){
                         Handler().postDelayed({
                             this@EasyGame.finish()
                         }, 3000)
+                    }else{
+                        game!!.posAppleY -= 7
+                        game!!.posBananaY -= 10
+                        //refreca la pantalla y llama al draw
+                        game!!.invalidate()
                     }
                 }
             }
         }, 0, 20)
     }
 
-    //cuando se destruye la actividad paramos la musica y liberamos recursos
+    //cuando se destruye la actividad paramos la musica
+    //y liberamos recursos
     override fun onDestroy() {
         super.onDestroy()
         game?.gameLoop?.stop()
