@@ -2,17 +2,14 @@ package com.marticurto.healtycatch.clases
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.graphics.*
 import android.media.MediaPlayer
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.os.HandlerCompat.postDelayed
-import com.marticurto.healtycatch.MainActivity
 import com.marticurto.healtycatch.R
 import java.util.*
-import java.util.logging.Handler
+import kotlin.random.Random.*
 
 /**
  * Clase que representa los objetos del juego y sus interacciones
@@ -23,23 +20,26 @@ import java.util.logging.Handler
  *
  */
 // Extendemos de view para dibujar
-open class Game : View {
+open class Game//en el constructor hacemos que empieze a sonar la musica en loop
+    (context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     //creacion de variables necesarias
     var ancho = 0
     var alto = 0
     var cestaX = 0
     var cestaY = 0
-    var bananaX = 0
-    var bananaY =0
     var radio = 0
-    var posAppleX = 0
+    private var posAppleX = 0
     var posAppleY = 0
-    var posBananaX = 0
+    private var posBananaX = 0
     var posBananaY = 0
-    var posBurgerX = 0
+    private var posBurgerX = 0
     var posBurgerY = 0
+
+    //variable para ver si ponemos enemigos
     var enemyActive = false
+
+    //variables para el sonido y musica
     var gameLoop: MediaPlayer = MediaPlayer.create(context,R.raw.music)
     private var error: MediaPlayer = MediaPlayer.create(context,R.raw.error)
     private var beep: MediaPlayer = MediaPlayer.create(context,R.raw.beep)
@@ -50,10 +50,9 @@ open class Game : View {
     private var rectBurger: RectF?=null
     private val random = Random()
     var puntuacion:Int = 0
-    private var gameOverMessage=""
 
-    //en el constructor hacemos que empieze a sonar la musica en loop
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs){
+    //en el constructor definimos el comportamiento de la musica
+    init {
         gameLoop = MediaPlayer.create(context,R.raw.music)
         gameLoop.start()
         gameLoop.setOnCompletionListener { gameLoop.start() }
@@ -67,7 +66,7 @@ open class Game : View {
             MotionEvent.ACTION_UP -> {}
             MotionEvent.ACTION_MOVE -> {
                 cestaX = event.x.toInt()
-                radio = 50
+                radio = 68
                 //repintamos la cesta al moverla
                 this.invalidate()
             }
@@ -88,7 +87,6 @@ open class Game : View {
         val burger = Paint()
         val puntos = Paint()
         val texto = Paint()
-
 
         //Definimos los colores de los objetos a pintar
         fondo.color = Color.BLUE
@@ -121,11 +119,12 @@ open class Game : View {
         if (posAppleY < 0) {
             posAppleY = alto-50
             posAppleX = random.nextInt(ancho)
+            puntuacion -=1
         }
-
         if (posBananaY < 0) {
             posBananaY = alto-50
             posBananaX = random.nextInt(ancho)
+            puntuacion -=1
         }
 
         //pintamos recuadro para las frutas
@@ -175,9 +174,20 @@ open class Game : View {
         }
         canvas.drawText(puntuacion.toString(), 150F, 150F,puntos)
 
-        if(puntuacion>=30){
+        if(puntuacion<=-1){
+            texto.color=Color.RED
             posAppleY=0
             posBananaY=0
+            posBurgerY=0
+            canvas.drawRect(Rect(0, 0, ancho, alto), fondo)
+            canvas.drawText("Has muerto",300F,400F,texto)
+        }
+
+        if(puntuacion>=30){
+            texto.color=Color.BLACK
+            posAppleY=0
+            posBananaY=0
+            posBurgerY=0
             canvas.drawRect(Rect(0, 0, ancho, alto), fondo)
             canvas.drawText("Has ganado!",300F,400F,texto)
         }
@@ -211,7 +221,6 @@ open class Game : View {
                 posBurgerY=0
                 canvas.drawRect(Rect(0, 0, ancho, alto), fondo)
                 canvas.drawText("Has muerto",300F,400F,texto)
-
             }
 
             if(puntuacion>=30){
@@ -224,4 +233,5 @@ open class Game : View {
             }
         }
     }
+
 }

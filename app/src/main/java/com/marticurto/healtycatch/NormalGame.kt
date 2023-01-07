@@ -26,13 +26,15 @@ class NormalGame : AppCompatActivity() {
         val obs = game!!.viewTreeObserver
         game!!.enemyActive=true
 
-        //a partir del observador podemos pintar la cesta donde queremos (en el centro)
+        //a partir del observador podemos pintar la cesta donde queremos (en el centro) y las frutas abajo
         obs.addOnGlobalLayoutListener {
             game!!.ancho = game!!.width
             game!!.alto = game!!.height
             game!!.cestaX = game!!.ancho / 2
             game!!.cestaY = 250
-            game!!.radio = 50
+            game!!.posAppleY=game!!.alto
+            game!!.posBananaY=game!!.alto
+            game!!.radio = 68
         }
 
         //Ejecutamos cada 20 milisegundos

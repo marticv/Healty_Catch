@@ -22,13 +22,15 @@ class EasyGame : AppCompatActivity() {
         val obs = game!!.viewTreeObserver
         game!!.enemyActive=false
 
-        //creamos un listener para saber las medidas de la pantalla una vez pintada y asi poder colocar la cesta
+        //creamos un listener para saber las medidas de la pantalla una vez pintada y asi poder colocar la cesta y las frutas abajo
         obs.addOnGlobalLayoutListener {
             game!!.ancho = game!!.width
             game!!.alto = game!!.height
             game!!.cestaX = game!!.ancho / 2
             game!!.cestaY = 250
-            game!!.radio = 50
+            game!!.radio = 68
+            game!!.posAppleY=game!!.alto
+            game!!.posBananaY=game!!.alto
         }
 
         //Ejecutamos cada 20 milisegundos
@@ -41,7 +43,8 @@ class EasyGame : AppCompatActivity() {
                     //refreca la pantalla y llama al draw
                     game!!.invalidate()
                     //si gamanos al cabo de 3s se vuelve a la pantalla inicial
-                    if(game!!.puntuacion>30){
+                    //si ganamos o perdemos al cabo de 3s volvemos a la pantalla inicial
+                    if(game!!.puntuacion>=30|| game!!.puntuacion<0){
                         Handler().postDelayed({
                             this@EasyGame.finish()
                         }, 3000)

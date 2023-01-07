@@ -55,11 +55,11 @@
         android:id="@+id/tvEasy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
-        android:text="Facil: Llega a 100 pts - sin enemigos"
+        android:layout_marginTop="168dp"
+        android:text="Facil: Llega a 30 pts - sin enemigos"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDifficulty" />
 
@@ -67,12 +67,23 @@
         android:id="@+id/tvNormal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
-        android:text="Normal: Llega a 100 pts - con enemigos"
+        android:layout_marginTop="44dp"
+        android:text="Normal: Llega a 30 pts - con enemigos \n - los enemigos restan un punto \n - si bajas de 0 mueres"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btEasy" />
+
+    <TextView
+        android:id="@+id/tvInstrucciones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Manzana: 2 pts \n Platano: 5 pts\nperder una fruta: -1 pts"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDifficulty" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
