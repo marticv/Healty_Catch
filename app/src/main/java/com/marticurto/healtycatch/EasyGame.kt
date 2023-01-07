@@ -37,9 +37,15 @@ class EasyGame : AppCompatActivity() {
             override fun run() {
                 appleHandler.post { //Cada 20 segundos movemos las frutas
                     game!!.posAppleY -= 10
-                    game!!.posBananaY -= 12
+                    game!!.posBananaY -= 15
                     //refreca la pantalla y llama al draw
                     game!!.invalidate()
+                    //si gamanos al cabo de 3s se vuelve a la pantalla inicial
+                    if(game!!.puntuacion>30){
+                        Handler().postDelayed({
+                            this@EasyGame.finish()
+                        }, 3000)
+                    }
                 }
             }
         }, 0, 20)

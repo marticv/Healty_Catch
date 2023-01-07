@@ -2,13 +2,17 @@ package com.marticurto.healtycatch.clases
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.*
 import android.media.MediaPlayer
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.os.HandlerCompat.postDelayed
+import com.marticurto.healtycatch.MainActivity
 import com.marticurto.healtycatch.R
 import java.util.*
+import java.util.logging.Handler
 
 /**
  * Clase que representa los objetos del juego y sus interacciones
@@ -45,7 +49,8 @@ open class Game : View {
     private var rectBanana: RectF?=null
     private var rectBurger: RectF?=null
     private val random = Random()
-    private var puntuacion:Int = 0
+    var puntuacion:Int = 0
+    private var gameOverMessage=""
 
     //en el constructor hacemos que empieze a sonar la musica en loop
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs){
@@ -82,19 +87,24 @@ open class Game : View {
         val banana = Paint()
         val burger = Paint()
         val puntos = Paint()
+        val texto = Paint()
+
 
         //Definimos los colores de los objetos a pintar
-        fondo.color = Color.WHITE
+        fondo.color = Color.BLUE
         fondo.style = Paint.Style.FILL_AND_STROKE
         puntos.textAlign = Paint.Align.RIGHT
         puntos.textSize = 100F
-        puntos.color = Color.BLUE
+        puntos.color = Color.WHITE
+        texto.color=Color.BLACK
+        texto.textAlign = Paint.Align.CENTER
+        texto.textSize= 100F
 
         //Pinto rectángulo con un ancho y alto de 1000 o de menos si la pantalla es menor.
         canvas.drawRect(Rect(0, 0, ancho, alto), fondo)
 
         //creamos bitmap con la cesta y alimentos
-        val imgBasket: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.basket_upsidedown)
+        val imgBasket: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.basket)
         val imgApple: Bitmap = BitmapFactory.decodeResource(resources,R.drawable.apple)
         val imgBanana: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.banana)
         val imgBurger: Bitmap = BitmapFactory.decodeResource(resources,R.drawable.burger)
@@ -165,6 +175,13 @@ open class Game : View {
         }
         canvas.drawText(puntuacion.toString(), 150F, 150F,puntos)
 
+        if(puntuacion>=30){
+            posAppleY=0
+            posBananaY=0
+            canvas.drawRect(Rect(0, 0, ancho, alto), fondo)
+            canvas.drawText("Has ganado!",300F,400F,texto)
+        }
+
         //en caso de que queramos enemigos tambien los pintamos
         //y definimos su comportamiento
         if (enemyActive) {
@@ -185,6 +202,25 @@ open class Game : View {
                 posBurgerY=alto-50
                 posBurgerX=random.nextInt(ancho)
                 error.start()
+            }
+
+            if(puntuacion<=-1){
+                texto.color=Color.RED
+                posAppleY=0
+                posBananaY=0
+                posBurgerY=0
+                canvas.drawRect(Rect(0, 0, ancho, alto), fondo)
+                canvas.drawText("Has muerto",300F,400F,texto)
+
+            }
+
+            if(puntuacion>=30){
+                texto.color=Color.BLACK
+                posAppleY=0
+                posBananaY=0
+                posBurgerY=0
+                canvas.drawRect(Rect(0, 0, ancho, alto), fondo)
+                canvas.drawText("Has ganado!",300F,400F,texto)
             }
         }
     }

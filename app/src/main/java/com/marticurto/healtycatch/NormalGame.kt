@@ -1,11 +1,14 @@
 package com.marticurto.healtycatch
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.widget.Button
 import com.marticurto.healtycatch.clases.Game
 import java.util.*
+import kotlin.properties.Delegates
 
 class NormalGame : AppCompatActivity() {
 
@@ -38,14 +41,20 @@ class NormalGame : AppCompatActivity() {
             override fun run() {
                 handler.post { //Cada 0.02 segundos movemos las diferentes piezas y repintamos
                     game!!.posAppleY -= 10
-                    game!!.posBananaY -= 12
+                    game!!.posBananaY -= 15
                     game!!.posBurgerY -= 5
                     //refreca la pantalla y llama al draw
                     game!!.invalidate()
+
+                    //si ganamos o perdemos al cabo de 3s volvemos a la pantalla inicial
+                    if(game!!.puntuacion>=30|| game!!.puntuacion<0){
+                        Handler().postDelayed({
+                            this@NormalGame.finish()
+                        }, 3000)
+                    }
                 }
             }
         }, 0, 20)
-
     }
 
     //cuando se destruye la actividad paramos la musica y liberamos recursos
